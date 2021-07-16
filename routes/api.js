@@ -38,3 +38,24 @@ router.get('/api/workouts',(req,res)=>{
         res.json(err);
     });
 });
+
+
+// Route to get the latest 7 workouts 
+router.get('/api/workouts/range',(req,res)=>{
+    Workout.aggregate([
+        {
+            $addFields:{
+                totalDuration:{
+                    $sum: '$exercises.duration',
+                },
+            },
+        },
+    ])
+    .sort({_id:-1})
+    .limit(7)
+    .then((workoutData)=>{
+        res.json(workoutData);
+    }).catch((err)=>{
+        res.json(err);
+    });
+});
