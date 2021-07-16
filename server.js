@@ -8,11 +8,15 @@ app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-require("./routes/api")(app);
-require("./routes/view")(app);
+
+app.use(require("./routes/api.js"));
+app.use(require("./routes/view.js"));
 
 mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/workout", {
-  useNewUrlParser: true
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+    useFindAndModify: false
 });
 
 app.listen(PORT, function() {
